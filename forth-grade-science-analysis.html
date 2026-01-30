@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四年级科学素养分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 25px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-box {
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .input-box label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-size: 14px;
+        }
+        
+        .essay-input {
+            margin: 15px 0;
+        }
+        
+        .essay-input label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        
+        .essay-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .radar-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        
+        .score-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .score-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .score-card h3 {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .suggestion {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .suggestion h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .suggestion-content {
+            line-height: 1.6;
+        }
+        
+        .suggestion-content p {
+            margin-bottom: 15px;
+            color: #34495e;
+        }
+        
+        .suggestion-content ol {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .suggestion-content li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .comparison {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .comparison h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .better {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .worse {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #856404;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .score-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .comparison-table {
+                font-size: 14px;
+            }
+            
+            .comparison-table th, .comparison-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>四年级科学素养分析系统</h1>
+        <p class="subtitle">输入错题信息，获取个性化学习建议</p>
+        
+        <div class="note">
+            <strong>说明：</strong> 选择题每题2分，非选择题扣分请输入整数
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">选择题错误题号 (每题2分)</h2>
+            <p style="color: #666; margin-bottom: 15px;">请输入错误的题号（每格一个题号）：</p>
+            
+            <div class="input-row" id="choice-container">
+                <!-- 选择题输入框由JS生成 -->
+            </div>
+            
+            <button class="btn btn-secondary" onclick="addChoiceInputs()">添加更多输入框</button>
+            
+            <div class="essay-input">
+                <label>其他错误题号 (用逗号分隔)：</label>
+                <input type="text" id="extra-choices" placeholder="例如：12,15,18">
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">非选择题扣分数</h2>
+            
+            <div class="essay-input">
+                <label>31题扣分 (总分16分)：</label>
+                <input type="number" id="essay31" min="0" max="16" step="1" placeholder="输入整数扣分，如：2">
+            </div>
+            
+            <div class="essay-input">
+                <label>32题扣分 (总分8分)：</label>
+                <input type="number" id="essay32" min="0" max="8" step="1" placeholder="输入整数扣分，如：1">
+            </div>
+            
+            <div class="essay-input">
+                <label>33题扣分 (总分8分)：</label>
+                <input type="number" id="essay33" min="0" max="8" step="1" placeholder="输入整数扣分，如：2">
+            </div>
+            
+            <div class="essay-input">
+                <label>34题扣分 (总分8分)：</label>
+                <input type="number" id="essay34" min="0" max="8" step="1" placeholder="输入整数扣分，如：0">
+            </div>
+        </div>
+        
+        <button class="btn" onclick="analyze()">生成分析报告</button>
+        
+        <div class="result-section" id="result-section">
+            <h2 class="section-title">分析结果</h2>
+            
+            <div class="score-cards" id="score-cards">
+                <!-- 得分率卡片由JS生成 -->
+            </div>
+            
+            <div class="radar-container">
+                <h3 class="section-title">科学素养雷达图</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="comparison" id="comparison-table">
+                <!-- 对比表格由JS生成 -->
+            </div>
+            
+            <div class="suggestion" id="suggestion">
+                <!-- 学习建议由JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 四年级学年平均得分率
+        const YEAR_AVERAGE = {
+            '科学观念': 91.4,
+            '科学思维': 91.02,
+            '探究实践': 85.97,
+            '态度责任': 98.74
+        };
+        
+        // 四年级题目分值配置
+        const QUESTION_CONFIG = {
+            '科学观念': {
+                total: 18,
+                choices: [1, 7, 13, 17, 20, 24, 28, 29, 30],
+                essays: []
+            },
+            '科学思维': {
+                total: 58,
+                choices: [2, 3, 4, 9, 10, 11, 12, 14, 15, 16, 18, 19, 20, 21, 22, 23, 26, 27],
+                essays: [
+                    {id: 31, score: 16},
+                    {id: 34, score: 8}
+                ]
+            },
+            '探究实践': {
+                total: 22,
+                choices: [6, 8, 25],
+                essays: [
+                    {id: 32, score: 8},
+                    {id: 33, score: 8}
+                ]
+            },
+            '态度责任': {
+                total: 2,
+                choices: [5],
+                essays: []
+            }
+        };
+        
+        // 完整的学习建议
+        const SUGGESTIONS = {
+            '科学观念': {
+                title: "科学观念是科学学习的基础，核心问题多为概念掌握不扎实、知识点记忆零散，未形成系统认知。我们给您的建议如下：",
+                tips: [
+                    "日常多做针对性提问，比如饭后、睡前用 5-10 分钟，随机提问孩子课堂学过的科学概念（如 '植物的光合作用需要哪些条件？'、'什么是浮力？'），倒逼孩子主动回顾、梳理知识点，避免被动记背。",
+                    "帮孩子搭建科学概念体系，用简单的思维导图、知识清单，让孩子把零散的知识点串联起来（如把 '动物的分类''不同动物的生活习性' 整合梳理），每周花 1 次时间和孩子一起复盘巩固。",
+                    "营造轻量的学习紧迫感，约定每日 '科学小打卡'，让孩子主动复述当天学的 1-2 个核心概念，若表述不清晰，引导孩子翻书重新学习，培养主动查漏补缺的习惯。"
+                ]
+            },
+            '科学思维': {
+                title: "科学思维薄弱主要表现为不会用学过的知识分析、解决问题，做题时思路混乱，易生搬硬套。我们建议您侧重引导孩子表达思路、强化知识应用：",
+                tips: [
+                    "进行少量高频的思维练习，每天让孩子做 3-5 道科学选择 / 非选择题，不追求速度但要求孩子说清解题思路，比如让孩子讲一讲 '这道题用到了哪个科学知识点？你是怎么判断的？你怎么知道其他答案不对？这题还能怎么考？'，避免只对答案。",
+                    "生活中渗透科学思维，遇到日常科学现象（如 '杯子里的水为什么会洒出来？''冬天窗户上为什么会有哈气？'），主动引导孩子用课堂学过的知识解释，锻炼 '用知识思考问题' 的能力，让孩子明白科学思维不仅能用在做题上，也能解决生活问题。",
+                    "针对孩子的错题，重点分析 '思路问题'，而非单纯订正答案。比如孩子错题是因为没找到对应的科学知识，就和孩子一起回顾知识点，再让孩子用正确的思路重新做一遍，强化知识与解题的关联。"
+                ]
+            },
+            '探究实践': {
+                title: "探究实践薄弱多是因为孩子做实验时流于形式，不关注细节、缺乏主动思考，对实验原理和过程的理解浮于表面。建议您可通过家庭简易实验，培养孩子的探究细致性：",
+                tips: [
+                    "陪孩子做生活化简易科学实验（利用家里的水杯、筷子、食盐、蜡烛等材料），利用家里现有条件重复进行课堂看过、做过的实验，放慢实验节奏，让孩子自己设计实验步骤、动手操作，家长只做引导，不包办代替。",
+                    "要求孩子关注实验细节并记录，让孩子准备一个实验小本子，记录实验的材料、步骤、观察到的现象（哪怕是细微的变化），甚至让孩子思考 '如果改变一个实验条件，结果会不一样吗？'，比如 '搅拌和不搅拌，盐溶解的速度差多少？'，培养主动探究的思维。",
+                    "鼓励孩子反思实验中的问题，如果实验结果和预期不一样，和孩子一起分析原因（如 '是不是材料用量不对？''是不是操作步骤出错了？'），让孩子明白实验的核心是 '观察 - 思考 - 验证'，而非单纯完成动手操作。"
+                ]
+            },
+            '态度责任': {
+                title: "态度责任薄弱的核心是学习中马虎、粗心、不认真，对作业和学习缺乏敬畏心，这类问题并非知识问题，建议您严格培养孩子的认真习惯：",
+                tips: [
+                    "对孩子的科学作业严格要求，绝不敷衍，要求孩子审题仔细、书写工整、步骤完整，做完后必须自己先检查，家长再复核，若发现因马虎、粗心犯的错误，不轻易放过，让孩子重新订正并标注 '错误原因（马虎 / 粗心）'，强化孩子的责任意识。",
+                    "建立错题溯源规则，把孩子的科学错题分为 '不会做的题' 和 '粗心做错的题'，针对粗心错题，让孩子制定简单的规避方法（如 '审题时圈画关键词''计算时反复核对'），并定期复盘，减少同类错误。",
+                    "从小事培养认真的态度，比如让孩子自己整理科学课本、实验器材，书写实验记录时要求字迹工整、内容完整，让孩子明白 '认真' 是一种通用的学习态度，不仅要体现在作业和考试中，更要体现在日常的每一个学习环节里。"
+                ]
+            }
+        };
+        
+        // 全部100%时的通用建议
+        const ALL_PERFECT_SUGGESTIONS = [
+            "继续保持良好的学习习惯，定期复习科学知识",
+            "鼓励孩子参与更多的科学实践活动，拓展科学视野",
+            "培养孩子的科学探究兴趣，阅读科普书籍或观看科学节目",
+            "鼓励孩子分享学到的科学知识，增强表达和应用能力"
+        ];
+        
+        let radarChart = null;
+        let choiceInputCount = 0;
+        
+        // 初始化选择题输入框
+        function initChoiceInputs() {
+            const container = document.getElementById('choice-container');
+            choiceInputCount = 0;
+            
+            // 创建初始10个输入框
+            for (let i = 1; i <= 10; i++) {
+                addChoiceInput();
+            }
+        }
+        
+        // 添加选择题输入框
+        function addChoiceInput() {
+            choiceInputCount++;
+            const container = document.getElementById('choice-container');
+            
+            const div = document.createElement('div');
+            div.className = 'input-box';
+            div.id = `choice-box-${choiceInputCount}`;
+            
+            const label = document.createElement('label');
+            label.textContent = `题号${choiceInputCount}`;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `choice${choiceInputCount}`;
+            input.placeholder = '题号';
+            input.maxLength = 2;
+            
+            div.appendChild(label);
+            div.appendChild(input);
+            container.appendChild(div);
+        }
+        
+        // 添加更多选择题输入框
+        function addChoiceInputs() {
+            for (let i = 1; i <= 10; i++) {
+                addChoiceInput();
+            }
+        }
+        
+        // 计算各维度得分率
+        function calculateScores() {
+            // 收集错误选择题
+            const wrongChoices = [];
+            for (let i = 1; i <= choiceInputCount; i++) {
+                const input = document.getElementById(`choice${i}`);
+                if (input && input.value.trim()) {
+                    const value = parseInt(input.value.trim());
+                    if (!isNaN(value)) {
+                        wrongChoices.push(value);
+                    }
+                }
+            }
+            
+            // 额外的错误题号
+            const extraInput = document.getElementById('extra-choices').value;
+            if (extraInput) {
+                extraInput.split(',').forEach(item => {
+                    const num = parseInt(item.trim());
+                    if (!isNaN(num)) wrongChoices.push(num);
+                });
+            }
+            
+            // 收集非选择题扣分
+            const essayDeductions = {};
+            
+            // 31题扣分
+            const essay31Input = document.getElementById('essay31');
+            const essay31Value = parseInt(essay31Input.value);
+            if (!isNaN(essay31Value) && essay31Value >= 0) {
+                essayDeductions[31] = essay31Value;
+            }
+            
+            // 32题扣分
+            const essay32Input = document.getElementById('essay32');
+            const essay32Value = parseInt(essay32Input.value);
+            if (!isNaN(essay32Value) && essay32Value >= 0) {
+                essayDeductions[32] = essay32Value;
+            }
+            
+            // 33题扣分
+            const essay33Input = document.getElementById('essay33');
+            const essay33Value = parseInt(essay33Input.value);
+            if (!isNaN(essay33Value) && essay33Value >= 0) {
+                essayDeductions[33] = essay33Value;
+            }
+            
+            // 34题扣分
+            const essay34Input = document.getElementById('essay34');
+            const essay34Value = parseInt(essay34Input.value);
+            if (!isNaN(essay34Value) && essay34Value >= 0) {
+                essayDeductions[34] = essay34Value;
+            }
+            
+            // 计算各维度得分率
+            const scores = {};
+            
+            for (const [dimension, config] of Object.entries(QUESTION_CONFIG)) {
+                let totalScore = config.total;
+                
+                // 扣除选择题分数
+                config.choices.forEach(qNum => {
+                    if (wrongChoices.includes(qNum)) {
+                        totalScore -= 2;
+                    }
+                });
+                
+                // 扣除非选择题分数
+                config.essays.forEach(essay => {
+                    if (essayDeductions[essay.id]) {
+                        totalScore -= essayDeductions[essay.id];
+                    }
+                });
+                
+                // 计算得分率
+                const scoreRate = (totalScore / config.total) * 100;
+                scores[dimension] = Math.max(0, Math.min(100, parseFloat(scoreRate.toFixed(2))));
+            }
+            
+            return scores;
+        }
+        
+        // 检查是否所有维度都是100%
+        function isAllPerfect(scores) {
+            return Object.values(scores).every(score => score === 100);
+        }
+        
+        // 识别最薄弱环节（排除100%的维度）
+        function findWeakest(scores) {
+            // 排除100%的维度
+            const nonPerfectDimensions = [];
+            for (const [dim, score] of Object.entries(scores)) {
+                if (score < 100) {
+                    nonPerfectDimensions.push({dim, score});
+                }
+            }
+            
+            // 如果没有非100%的维度，返回空数组
+            if (nonPerfectDimensions.length === 0) {
+                return [];
+            }
+            
+            // 在非100%的维度中，找出低于平均分的维度
+            const belowAverage = [];
+            for (const {dim, score} of nonPerfectDimensions) {
+                if (score < YEAR_AVERAGE[dim]) {
+                    belowAverage.push({dim, score});
+                }
+            }
+            
+            if (belowAverage.length > 0) {
+                // 取最低分
+                belowAverage.sort((a, b) => a.score - b.score);
+                const weakest = [belowAverage[0].dim];
+                
+                // 检查是否有并列最低
+                for (let i = 1; i < belowAverage.length; i++) {
+                    if (belowAverage[i].score === belowAverage[0].score) {
+                        weakest.push(belowAverage[i].dim);
+                    }
+                }
+                return weakest;
+            } else {
+                // 都高于或等于平均分，找差距最小的
+                const gaps = [];
+                for (const {dim, score} of nonPerfectDimensions) {
+                    gaps.push({dim, gap: score - YEAR_AVERAGE[dim]});
+                }
+                
+                gaps.sort((a, b) => a.gap - b.gap);
+                const weakest = [gaps[0].dim];
+                
+                // 检查是否有并列最小差距
+                for (let i = 1; i < gaps.length; i++) {
+                    if (gaps[i].gap === gaps[0].gap) {
+                        weakest.push(gaps[i].dim);
+                    }
+                }
+                return weakest;
+            }
+        }
+        
+        // 绘制雷达图
+        function drawRadarChart(scores) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            // 如果已经有图表，先销毁
+            if (radarChart) {
+                radarChart.destroy();
+            }
+            
+            const dimensions = Object.keys(scores);
+            const studentScores = Object.values(scores);
+            const averageScores = dimensions.map(dim => YEAR_AVERAGE[dim]);
+            
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: dimensions,
+                    datasets: [
+                        {
+                            label: '学生得分率',
+                            data: studentScores,
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4
+                        },
+                        {
+                            label: '年级平均得分率',
+                            data: averageScores,
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            borderColor: 'rgba(231, 76, 60, 1)',
+                            pointBackgroundColor: 'rgba(231, 76, 60, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(231, 76, 60, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    family: "'Microsoft YaHei', Arial, sans-serif"
+                                },
+                                color: '#2c3e50'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                font: {
+                                    size: 12
+                                },
+                                maxTicksLimit: 5,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: "'Microsoft YaHei', Arial, sans-serif"
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw.toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 显示分析结果
+        function displayResults(scores) {
+            // 显示结果区域
+            document.getElementById('result-section').style.display = 'block';
+            
+            // 检查是否所有维度都是100%
+            const allPerfect = isAllPerfect(scores);
+            
+            // 如果不是全100%，找出薄弱环节
+            const weakest = allPerfect ? [] : findWeakest(scores);
+            
+            // 生成得分率卡片
+            const scoreCards = document.getElementById('score-cards');
+            scoreCards.innerHTML = '';
+            
+            for (const [dimension, score] of Object.entries(scores)) {
+                const average = YEAR_AVERAGE[dimension];
+                const diff = score - average;
+                const diffText = diff >= 0 ? `+${diff.toFixed(2)}` : diff.toFixed(2);
+                
+                const card = document.createElement('div');
+                card.className = 'score-card';
+                
+                let indicator = '';
+                if (!allPerfect && weakest.includes(dimension)) {
+                    indicator = ' ⚠️';
+                }
+                
+                // 如果是100%，用特殊样式
+                if (score === 100) {
+                    card.style.borderLeft = '4px solid #27ae60';
+                }
+                
+                card.innerHTML = `
+                    <h3>${dimension}${indicator}</h3>
+                    <div class="score-value" style="${score === 100 ? 'color: #27ae60;' : ''}">
+                        ${score.toFixed(1)}%
+                        ${score === 100 ? '🎉' : ''}
+                    </div>
+                    <div style="font-size: 12px; margin-top: 5px; color: ${diff >= 0 ? '#27ae60' : '#e74c3c'}">
+                        年级平均: ${average}% (${diffText}%)
+                    </div>
+                `;
+                
+                scoreCards.appendChild(card);
+            }
+            
+            // 绘制雷达图
+            drawRadarChart(scores);
+            
+            // 生成对比表格
+            const comparisonDiv = document.getElementById('comparison-table');
+            comparisonDiv.innerHTML = '';
+            
+            const comparisonTitle = document.createElement('h3');
+            comparisonTitle.textContent = '📊 与年级平均水平对比';
+            comparisonDiv.appendChild(comparisonTitle);
+            
+            const table = document.createElement('table');
+            table.className = 'comparison-table';
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>科学素养维度</th>
+                        <th>学生得分率</th>
+                        <th>年级平均</th>
+                        <th>差距</th>
+                        <th>表现</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.entries(scores).map(([dim, score]) => {
+                        const average = YEAR_AVERAGE[dim];
+                        const diff = score - average;
+                        const diffText = diff >= 0 ? `+${diff.toFixed(2)}%` : `${diff.toFixed(2)}%`;
+                        const performance = diff >= 0 ? '高于平均' : '低于平均';
+                        const performanceClass = diff >= 0 ? 'better' : 'worse';
+                        
+                        return `
+                            <tr>
+                                <td>${dim}${score === 100 ? ' 🎉' : ''}</td>
+                                <td style="${score === 100 ? 'font-weight: bold; color: #27ae60;' : ''}">${score.toFixed(2)}%</td>
+                                <td>${average}%</td>
+                                <td class="${performanceClass}">${diffText}</td>
+                                <td class="${performanceClass}">${performance}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            `;
+            comparisonDiv.appendChild(table);
+            
+            // 生成学习建议
+            const suggestionDiv = document.getElementById('suggestion');
+            suggestionDiv.innerHTML = '';
+            
+            if (allPerfect) {
+                // 全部100%时的建议
+                suggestionDiv.innerHTML = `
+                    <h3>🎉 完美表现！所有维度都达到了100%！</h3>
+                    <div class="suggestion-content">
+                        <p>您的孩子在所有维度都达到了满分，表现非常出色！以下是一些进一步提升的建议：</p>
+                        <ol>
+                            ${ALL_PERFECT_SUGGESTIONS.map(tip => `<li>${tip}</li>`).join('')}
+                        </ol>
+                    </div>
+                `;
+            } else if (weakest.length > 0) {
+                // 有薄弱环节
+                const title = document.createElement('h3');
+                title.textContent = `📋 个性化学习建议 (薄弱环节: ${weakest.join('、')})`;
+                suggestionDiv.appendChild(title);
+                
+                // 为每个薄弱维度添加完整建议
+                weakest.forEach(dim => {
+                    const suggestion = SUGGESTIONS[dim];
+                    
+                    const suggestionBlock = document.createElement('div');
+                    suggestionBlock.className = 'suggestion-content';
+                    
+                    const dimTitle = document.createElement('h4');
+                    dimTitle.textContent = `${dim}提升建议：`;
+                    dimTitle.style.color = '#2c3e50';
+                    dimTitle.style.marginTop = '15px';
+                    dimTitle.style.marginBottom = '10px';
+                    
+                    const description = document.createElement('p');
+                    description.textContent = suggestion.title;
+                    description.style.fontStyle = 'italic';
+                    description.style.color = '#555';
+                    
+                    const tipsList = document.createElement('ol');
+                    suggestion.tips.forEach(tip => {
+                        const li = document.createElement('li');
+                        li.textContent = tip;
+                        li.style.marginBottom = '12px';
+                        tipsList.appendChild(li);
+                    });
+                    
+                    suggestionBlock.appendChild(dimTitle);
+                    suggestionBlock.appendChild(description);
+                    suggestionBlock.appendChild(tipsList);
+                    suggestionDiv.appendChild(suggestionBlock);
+                });
+            } else {
+                // 没有100%的维度，但也没有找到薄弱环节（理论上不会出现，但保留处理）
+                suggestionDiv.innerHTML = `
+                    <h3>🎉 优秀表现！</h3>
+                    <div class="suggestion-content">
+                        <p>您的孩子在所有维度都达到了年级平均水平以上，继续保持！以下是一些通用建议：</p>
+                        <ol>
+                            <li>继续保持良好的学习习惯，定期复习科学知识</li>
+                            <li>鼓励孩子参与更多的科学实践活动，拓展科学视野</li>
+                            <li>培养孩子的科学探究兴趣，阅读科普书籍或观看科学节目</li>
+                            <li>鼓励孩子分享学到的科学知识，增强表达和应用能力</li>
+                        </ol>
+                    </div>
+                `;
+            }
+            
+            // 滚动到结果区域
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // 分析按钮点击事件
+        function analyze() {
+            const scores = calculateScores();
+            displayResults(scores);
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            initChoiceInputs();
+            
+            // 添加键盘事件支持
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    analyze();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
