@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科学素养分析系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn-grade4 {
+            background: #e74c3c;
+        }
+        .btn-grade4:hover {
+            background: #c0392b;
+        }
+        .btn-grade5 {
+            background: #27ae60;
+        }
+        .btn-grade5:hover {
+            background: #219653;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>科学素养分析系统</h1>
+        <p style="color: #7f8c8d; margin-bottom: 30px;">请选择学生所在年级：</p>
+        
+        <a href="fourth-grade-science.html" class="btn btn-grade4">四年级分析系统</a>
+        <a href="fifth-grade-science.html" class="btn btn-grade5">五年级分析系统</a>
+        
+        <div class="instructions">
+            <h3>使用说明：</h3>
+            <ol>
+                <li>根据学生年级选择对应分析系统</li>
+                <li>输入选择题错误题号（每题2分）</li>
+                <li>输入非选择题扣分数（整数）</li>
+                <li>点击"生成分析报告"查看结果</li>
+                <li>系统会自动生成科学素养雷达图和学习建议</li>
+            </ol>
+        </div>
+        
+        <div style="margin-top: 30px; color: #95a5a6; font-size: 14px;">
+            <p>© 2024 科学素养分析系统</p>
+            <p>仅供家长参考使用</p>
+        </div>
+    </div>
+</body>
+</html>
